@@ -4,7 +4,7 @@
 
 #include "header.hpp"
 
-void decryption(std::vector<unsigned char> &bytes, int key) {
+void encryption(std::vector<unsigned char> &bytes, int key) {
     std::vector<unsigned int> temp_vec;
     srand(key);
     for (auto iter: bytes) {
