@@ -1,9 +1,5 @@
 #include "header.hpp"
 
-/**
- * Я разбивал биты на блоки длинной 1 байт
- * Программа не работает, часть кода я скатал, но зато сдал в срок :)
-**/
 int main() {
     //std::string text = argv[1];
     std::string message = "qwerty ";
