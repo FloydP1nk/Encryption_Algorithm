@@ -40,6 +40,8 @@ void encryption(std::vector<unsigned char> &bytes, int key) {
         char r4 = tmp;
         outputFile.write(&r1, sizeof(r1));
         outputFile.write(&r2, sizeof(r2));
+        outputFile.write(&r1, sizeof(r3));
+        outputFile.write(&r2, sizeof(r4));
     }
     for (size_t j = 0; j < temp_vec.size(); ++j) {
         bytes[j] = static_cast<unsigned char>(temp_vec[j]);
