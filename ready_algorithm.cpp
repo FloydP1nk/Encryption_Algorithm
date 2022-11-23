@@ -5,7 +5,7 @@
 
 
 int main(int argc, const char *argv[]) {
-    if (argc != 4) {
+    if (argc != 5) {
         std::cerr << "Error: Use 4 parameters";
         return 1;
     }
@@ -30,13 +30,36 @@ int main(int argc, const char *argv[]) {
         outputFile.open(file_for_encrypted_message, std::ios::binary);
 
         unsigned int tmp;
-        for (size_t i = 0; i < bytes.size(); ++i) {
+        for (size_t i = 0; i < bytes.size(); i += 4) {
             unsigned int gamma1 = rand(); /// Гамма 1
             unsigned int gamma2 = rand(); /// Гамма 2
             unsigned char b1 = bytes[i];
-            unsigned char b2 = i + 1 < bytes.size() ? bytes[i + 1] : 0u;
-            unsigned char b3 = i + 2 < bytes.size() ? bytes[i + 2] : 0u;
-            unsigned char b4 = i + 3 < bytes.size() ? bytes[i + 3] : 0u;
+            unsigned char b2;    //
+            unsigned char b3;    //
+            unsigned char b4;    //
+            /// Добавляем пустые элементы, если блок заполняется не полностью
+            if (i + 1 <bytes.size())  {
+                b2 = bytes[i + 1];
+            } else {
+                b2 = 0u;
+                b3 = 0u;
+                b4 = 0u;
+            }
+            if (i + 2 < bytes.size())  {
+                b3 = bytes[i + 2];
+            } else {
+                b3 = 0u;
+                b4 = 0u;
+            }
+            if (i + 3 < bytes.size())  {
+                b4 = bytes[i + 3];
+            } else {
+                b4 = 0u;
+            }
+            ///
+//            unsigned char b2 = i + 1 < bytes.size() ? bytes[i + 1] : 0u;
+//            unsigned char b3 = i + 2 < bytes.size() ? bytes[i + 2] : 0u;
+//            unsigned char b4 = i + 3 < bytes.size() ? bytes[i + 3] : 0u;
             /// Гаммирование
             tmp = static_cast<unsigned int>(b1);
             tmp <<= 8;
@@ -73,7 +96,7 @@ int main(int argc, const char *argv[]) {
         readFile.close();
         std::vector<char> decryptedData(encryptedData.size());
 
-        for (int i = 0; i < encryptedData.size(); ++i) {
+        for (int i = 0; i < encryptedData.size(); i += 4) {
             unsigned int gamma1 = rand(); /// Гамма 1
             unsigned int gamma2 = rand(); /// Гамма 2
             unsigned char b1 = encryptedData[i];
@@ -100,8 +123,9 @@ int main(int argc, const char *argv[]) {
             decryptedData[i + 2] = r3;
             decryptedData[i + 3] = r4;
         }
-        for (auto& iter : decryptedData) { /// Вывод
+        for (auto &iter: decryptedData) { /// Вывод
             std::cout << iter;
         }
     }
     return 0;
+}
