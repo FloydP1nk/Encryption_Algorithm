@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 
-
 int main(int argc, const char *argv[]) {
     if (argc != 5) {
         std::cerr << "Error: Use 4 parameters";
@@ -24,8 +23,10 @@ int main(int argc, const char *argv[]) {
     }
     /// Encryption
     if (mode == "encryption") {
-        srand(key);
+        const std::string file_for_encrypted_message(argv[2]); /// Файл для хранения зашифрованного сообщения
 
+        /// input message, key
+        srand(key);
         std::ofstream outputFile;
         outputFile.open(file_for_encrypted_message, std::ios::binary);
 
@@ -34,33 +35,33 @@ int main(int argc, const char *argv[]) {
             unsigned int gamma1 = rand(); /// Гамма 1
             unsigned int gamma2 = rand(); /// Гамма 2
             unsigned char b1 = bytes[i];
-            unsigned char b2;    //
-            unsigned char b3;    //
-            unsigned char b4;    //
+//            unsigned char b2;
+//            unsigned char b3;
+//            unsigned char b4;
             /// Добавляем пустые элементы, если блок заполняется не полностью
-            if (i + 1 <bytes.size())  {
-                b2 = bytes[i + 1];
-            } else {
-                b2 = 0u;
-                b3 = 0u;
-                b4 = 0u;
-            }
-            if (i + 2 < bytes.size())  {
-                b3 = bytes[i + 2];
-            } else {
-                b3 = 0u;
-                b4 = 0u;
-            }
-            if (i + 3 < bytes.size())  {
-                b4 = bytes[i + 3];
-            } else {
-                b4 = 0u;
-            }
+//            if (i + 1 <bytes.size())  {
+//                b2 = bytes[i + 1];
+//            } else {
+//                b2 = 0u;
+//                b3 = 0u;
+//                b4 = 0u;
+//            }
+//            if (i + 2 < bytes.size())  {
+//                b3 = bytes[i + 2];
+//            } else {
+//                b3 = 0u;
+//                b4 = 0u;
+//            }
+//            if (i + 3 < bytes.size())  {
+//                b4 = bytes[i + 3];
+//            } else {
+//                b4 = 0u;
+//            }
             ///
-//            unsigned char b2 = i + 1 < bytes.size() ? bytes[i + 1] : 0u;
-//            unsigned char b3 = i + 2 < bytes.size() ? bytes[i + 2] : 0u;
-//            unsigned char b4 = i + 3 < bytes.size() ? bytes[i + 3] : 0u;
-            /// Гаммирование
+            unsigned char b2 = i + 1 < bytes.size() ? bytes[i + 1] : 0u;
+            unsigned char b3 = i + 2 < bytes.size() ? bytes[i + 2] : 0u;
+            unsigned char b4 = i + 3 < bytes.size() ? bytes[i + 3] : 0u;
+            /// Формирование блока и гаммирование
             tmp = static_cast<unsigned int>(b1);
             tmp <<= 8;
             tmp |= static_cast<unsigned int>(b2);
@@ -88,6 +89,7 @@ int main(int argc, const char *argv[]) {
 
     /// Decryption
     if (mode == "decryption") {
+        /// input key
         srand(key);
         std::ifstream readFile;
         readFile.open(file_for_encrypted_message, std::ios::binary);
@@ -114,6 +116,7 @@ int main(int argc, const char *argv[]) {
             unsigned int result = /// Обратное гаммирование
                     ((shifted_encrypted_block >> 16) ^ gamma1) | ((shifted_encrypted_block) ^ gamma2);
 
+            /// Разбиваем блок на элементы
             unsigned char r1 = result >> 24;
             unsigned char r2 = result >> 16;
             unsigned char r3 = result >> 8;
@@ -122,6 +125,8 @@ int main(int argc, const char *argv[]) {
             decryptedData[i + 1] = r2;
             decryptedData[i + 2] = r3;
             decryptedData[i + 3] = r4;
+
+
         }
         for (auto &iter: decryptedData) { /// Вывод
             std::cout << iter;
