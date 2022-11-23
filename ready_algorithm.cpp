@@ -23,7 +23,6 @@ int main(int argc, const char *argv[]) {
     }
     /// Encryption
     if (mode == "encryption") {
-        const std::string file_for_encrypted_message(argv[2]); /// Файл для хранения зашифрованного сообщения
 
         /// input message, key
         srand(key);
